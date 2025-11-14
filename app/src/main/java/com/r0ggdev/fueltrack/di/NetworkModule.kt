@@ -1,6 +1,7 @@
 package com.r0ggdev.fueltrack.di
 
 import com.r0ggdev.fueltrack.data.remote.ApiService
+import com.r0ggdev.fueltrack.provider.data.remote.ProviderApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,6 +48,12 @@ object NetworkModule {
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+    
+    @Provides
+    @Singleton
+    fun provideProviderApiService(retrofit: Retrofit): ProviderApiService {
+        return retrofit.create(ProviderApiService::class.java)
     }
 }
 
