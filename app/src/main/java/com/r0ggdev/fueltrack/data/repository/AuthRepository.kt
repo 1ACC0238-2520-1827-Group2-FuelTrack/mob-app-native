@@ -20,26 +20,39 @@ class AuthRepository @Inject constructor(
             if (response.isSuccessful && response.body() != null) {
                 val loginResponse = response.body()!!
                 preferencesManager.saveToken(loginResponse.token)
-                preferencesManager.saveUserId(loginResponse.userId)
+                loginResponse.userId?.let { userId ->
+                    preferencesManager.saveUserId(userId)
+                }
                 Result.success(loginResponse)
             } else {
-                Result.failure(Exception("Error en el login: ${response.message()}"))
+                val errorBody = response.errorBody()?.string() ?: response.message()
+                Result.failure(Exception("Error en el login: $errorBody (${response.code()})"))
             }
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
     
-    suspend fun register(nombre: String, email: String, password: String): Result<RegisterResponse> {
+    suspend fun register(firstName: String, lastName: String, email: String, password: String, phone: String = ""): Result<RegisterResponse> {
         return try {
-            val response = apiService.register(RegisterRequest(nombre, email, password))
+            val response = apiService.register(RegisterRequest(
+                firstName = firstName,
+                lastName = lastName,
+                email = email,
+                password = password,
+                phone = phone,
+                role = 1
+            ))
             if (response.isSuccessful && response.body() != null) {
                 val registerResponse = response.body()!!
                 preferencesManager.saveToken(registerResponse.token)
-                preferencesManager.saveUserId(registerResponse.userId)
+                registerResponse.userId?.let { userId ->
+                    preferencesManager.saveUserId(userId)
+                }
                 Result.success(registerResponse)
             } else {
-                Result.failure(Exception("Error en el registro: ${response.message()}"))
+                val errorBody = response.errorBody()?.string() ?: response.message()
+                Result.failure(Exception("Error en el registro: $errorBody (${response.code()})"))
             }
         } catch (e: Exception) {
             Result.failure(e)
