@@ -16,7 +16,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
     
-    private const val BASE_URL = "https://back-end-qzwq.onrender.com/"
+    private const val BASE_URL = "https://fueltrack-api.onrender.com/api/"
     
     @Provides
     @Singleton

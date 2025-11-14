@@ -18,10 +18,13 @@ fun SignupScreen(
     navController: NavController,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
-    var nombre by remember { mutableStateOf("") }
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var nombreError by remember { mutableStateOf<String?>(null) }
+    var phone by remember { mutableStateOf("") }
+    var firstNameError by remember { mutableStateOf<String?>(null) }
+    var lastNameError by remember { mutableStateOf<String?>(null) }
     var emailError by remember { mutableStateOf<String?>(null) }
     var passwordError by remember { mutableStateOf<String?>(null) }
     
@@ -49,15 +52,29 @@ fun SignupScreen(
         )
         
         OutlinedTextField(
-            value = nombre,
+            value = firstName,
             onValueChange = {
-                nombre = it
-                nombreError = null
+                firstName = it
+                firstNameError = null
             },
             label = { Text("Nombre") },
             modifier = Modifier.fillMaxWidth(),
-            isError = nombreError != null,
-            supportingText = nombreError?.let { { Text(it) } }
+            isError = firstNameError != null,
+            supportingText = firstNameError?.let { { Text(it) } }
+        )
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        OutlinedTextField(
+            value = lastName,
+            onValueChange = {
+                lastName = it
+                lastNameError = null
+            },
+            label = { Text("Apellido") },
+            modifier = Modifier.fillMaxWidth(),
+            isError = lastNameError != null,
+            supportingText = lastNameError?.let { { Text(it) } }
         )
         
         Spacer(modifier = Modifier.height(16.dp))
@@ -89,14 +106,28 @@ fun SignupScreen(
             supportingText = passwordError?.let { { Text(it) } }
         )
         
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        OutlinedTextField(
+            value = phone,
+            onValueChange = { phone = it },
+            label = { Text("Teléfono (opcional)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        
         Spacer(modifier = Modifier.height(24.dp))
         
         Button(
             onClick = {
                 var isValid = true
                 
-                if (nombre.isBlank()) {
-                    nombreError = "El nombre no puede estar vacío"
+                if (firstName.isBlank()) {
+                    firstNameError = "El nombre no puede estar vacío"
+                    isValid = false
+                }
+                
+                if (lastName.isBlank()) {
+                    lastNameError = "El apellido no puede estar vacío"
                     isValid = false
                 }
                 
@@ -114,7 +145,7 @@ fun SignupScreen(
                 }
                 
                 if (isValid) {
-                    viewModel.register(nombre, email, password)
+                    viewModel.register(firstName, lastName, email, password, phone)
                 }
             },
             modifier = Modifier.fillMaxWidth(),

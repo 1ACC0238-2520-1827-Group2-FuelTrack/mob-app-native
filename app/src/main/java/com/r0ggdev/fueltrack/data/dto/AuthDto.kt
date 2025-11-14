@@ -7,17 +7,20 @@ data class LoginRequest(
 
 data class LoginResponse(
     val token: String,
-    val userId: String
+    val userId: String? = null
 )
 
 data class RegisterRequest(
-    val nombre: String,
+    val firstName: String,
+    val lastName: String,
     val email: String,
-    val password: String
+    val password: String,
+    val phone: String = "",
+    val role: Int = 1
 )
 
 data class RegisterResponse(
     val token: String,
-    val userId: String
+    val userId: String? = null
 )
 

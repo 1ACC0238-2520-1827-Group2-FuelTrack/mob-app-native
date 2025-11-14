@@ -7,10 +7,10 @@ import retrofit2.http.*
 interface ApiService {
     
     // Auth
-    @POST("auth/login")
+    @POST("Auth/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
     
-    @POST("auth/register")
+    @POST("Auth/register")
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
     
     // Vehicles
