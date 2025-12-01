@@ -5,58 +5,62 @@ import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
-    
+
     // Auth
-    @POST("Auth/login")
+    @POST("api/Auth/login")
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
-    
-    @POST("Auth/register")
+
+    @POST("api/Auth/register")
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
-    
+
     // Vehicles
-    @GET("vehicles/{userId}")
-    suspend fun getVehicles(@Path("userId") userId: String): Response<List<VehicleDto>>
-    
-    @POST("vehicles")
+    @GET("api/Vehicles")
+    suspend fun getVehicles(): Response<List<VehicleDto>>
+
+    @GET("api/Vehicles/{id}")
+    suspend fun getVehicleById(@Path("id") id: String): Response<VehicleDto>
+
+    @POST("api/Vehicles")
     suspend fun createVehicle(@Body request: CreateVehicleRequest): Response<VehicleDto>
-    
-    @PUT("vehicles/{id}")
+
+    @PUT("api/Vehicles/{id}")
     suspend fun updateVehicle(@Path("id") id: String, @Body request: UpdateVehicleRequest): Response<VehicleDto>
-    
-    @DELETE("vehicles/{id}")
+
+    @DELETE("api/Vehicles/{id}")
     suspend fun deleteVehicle(@Path("id") id: String): Response<Unit>
-    
+
     // Fuel Records
-    @GET("fuel-records/vehicle/{vehicleId}")
+    @GET("api/FuelRecords/vehicle/{vehicleId}")
     suspend fun getFuelRecordsByVehicle(@Path("vehicleId") vehicleId: String): Response<List<FuelRecordDto>>
-    
-    @GET("fuel-records/{vehicleId}/latest")
+
+    @GET("api/FuelRecords/{vehicleId}/latest")
     suspend fun getLatestFuelRecord(@Path("vehicleId") vehicleId: String): Response<FuelRecordDto>
-    
-    @POST("fuel-records")
+
+    @POST("api/FuelRecords")
     suspend fun createFuelRecord(@Body request: CreateFuelRecordRequest): Response<FuelRecordDto>
-    
-    @PUT("fuel-records/{id}")
+
+    @PUT("api/FuelRecords/{id}")
     suspend fun updateFuelRecord(@Path("id") id: String, @Body request: UpdateFuelRecordRequest): Response<FuelRecordDto>
-    
-    @DELETE("fuel-records/{id}")
+
+    @DELETE("api/FuelRecords/{id}")
     suspend fun deleteFuelRecord(@Path("id") id: String): Response<Unit>
-    
+
     // Expenses
-    @GET("expenses/vehicle/{vehicleId}")
+    @GET("api/Expenses/vehicle/{vehicleId}")
     suspend fun getExpensesByVehicle(@Path("vehicleId") vehicleId: String): Response<List<ExpenseDto>>
-    
-    @POST("expenses")
+
+    @POST("api/Expenses")
     suspend fun createExpense(@Body request: CreateExpenseRequest): Response<ExpenseDto>
-    
-    @PUT("expenses/{id}")
+
+    @PUT("api/Expenses/{id}")
     suspend fun updateExpense(@Path("id") id: String, @Body request: UpdateExpenseRequest): Response<ExpenseDto>
-    
-    @DELETE("expenses/{id}")
+
+    @DELETE("api/Expenses/{id}")
     suspend fun deleteExpense(@Path("id") id: String): Response<Unit>
-    
+
     // Dashboard
-    @GET("dashboard/{vehicleId}")
+    @GET("api/Analytics/client/{vehicleId}")
     suspend fun getDashboard(@Path("vehicleId") vehicleId: String): Response<DashboardDto>
 }
+
 

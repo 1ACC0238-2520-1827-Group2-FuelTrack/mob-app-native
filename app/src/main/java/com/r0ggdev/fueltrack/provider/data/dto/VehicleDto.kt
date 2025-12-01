@@ -12,6 +12,14 @@ data class ProviderVehicleDto(
     val currentLongitude: Double?
 )
 
+data class CreateVehicleRequest(
+    val licensePlate: String,
+    val brand: String,
+    val model: String,
+    val year: Int,
+    val capacity: Double
+)
+
 data class UpdateVehicleLocationRequest(
     val latitude: Double,
     val longitude: Double

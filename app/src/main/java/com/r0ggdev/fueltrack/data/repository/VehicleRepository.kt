@@ -11,9 +11,9 @@ import javax.inject.Singleton
 class VehicleRepository @Inject constructor(
     private val apiService: ApiService
 ) {
-    suspend fun getVehicles(userId: String): Result<List<VehicleDto>> {
+    suspend fun getVehicles(): Result<List<VehicleDto>> {
         return try {
-            val response = apiService.getVehicles(userId)
+            val response = apiService.getVehicles()
             if (response.isSuccessful && response.body() != null) {
                 Result.success(response.body()!!)
             } else {
@@ -23,7 +23,7 @@ class VehicleRepository @Inject constructor(
             Result.failure(e)
         }
     }
-    
+
     suspend fun createVehicle(request: CreateVehicleRequest): Result<VehicleDto> {
         return try {
             val response = apiService.createVehicle(request)
@@ -62,5 +62,19 @@ class VehicleRepository @Inject constructor(
             Result.failure(e)
         }
     }
+
+    suspend fun getVehicle(id: String): Result<VehicleDto> {
+        return try {
+            val response = apiService.getVehicleById(id)
+            if (response.isSuccessful && response.body() != null) {
+                Result.success(response.body()!!)
+            } else {
+                Result.failure(Exception("Error al obtener vehículo: ${response.message()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 }
 

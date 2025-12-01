@@ -16,7 +16,7 @@ import java.util.regex.Pattern
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: AuthViewModel
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -25,10 +25,36 @@ fun LoginScreen(
     
     val uiState by viewModel.uiState.collectAsState()
     
-    LaunchedEffect(uiState.isAuthenticated) {
-        if (uiState.isAuthenticated) {
-            navController.navigate(Screen.Dashboard.route) {
-                popUpTo(Screen.Login.route) { inclusive = true }
+    LaunchedEffect(uiState.isAuthenticated, uiState.role) {
+        if (uiState.isAuthenticated && uiState.role != null) {
+            // Navigate based on user role
+            val userRole = uiState.role!!
+            println("DEBUG: LoginScreen - Navigation decision:")
+            println("DEBUG: LoginScreen - userRole: '$userRole'")
+            println("DEBUG: LoginScreen - userRole.equals('Proveedor', ignoreCase=true): ${userRole.equals("Proveedor", ignoreCase = true)}")
+            println("DEBUG: LoginScreen - userRole.equals('Administrador', ignoreCase=true): ${userRole.equals("Administrador", ignoreCase = true)}")
+
+            when {
+                // Proveedor - verificar exactamente "Proveedor" (con P mayúscula como devuelve el backend)
+                userRole.equals("Proveedor", ignoreCase = true) -> {
+                    println("DEBUG: LoginScreen - ✅ User role 'Proveedor', navigating to provider_dashboard")
+                    navController.navigate("provider_dashboard") {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                }
+                // Administrador - va al dashboard regular (cliente)
+                userRole.equals("Administrador", ignoreCase = true) -> {
+                    println("DEBUG: LoginScreen - ✅ User role 'Administrador', navigating to regular dashboard")
+                    navController.navigate(Screen.Dashboard.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                }
+                else -> {
+                    println("DEBUG: LoginScreen - ❌ User role '$userRole' not recognized, navigating to regular dashboard")
+                    navController.navigate(Screen.Dashboard.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                }
             }
         }
     }

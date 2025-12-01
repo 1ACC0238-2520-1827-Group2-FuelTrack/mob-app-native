@@ -27,15 +27,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun FuelTrackApp(
-    authViewModel: AuthViewModel = hiltViewModel()
-) {
+fun FuelTrackApp() {
     val navController = rememberNavController()
-    val authState by authViewModel.uiState.collectAsState()
-    
-    // Iniciar siempre en Splash, que decidirá la navegación
+
+    // Iniciar con Splash Screen para flujo normal de autenticación
     NavGraph(
         navController = navController,
-        startDestination = Screen.Splash.route
+        startDestination = Screen.Splash.route  // ← Flujo normal
     )
 }

@@ -16,7 +16,7 @@ import java.util.regex.Pattern
 @Composable
 fun SignupScreen(
     navController: NavController,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: AuthViewModel
 ) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }

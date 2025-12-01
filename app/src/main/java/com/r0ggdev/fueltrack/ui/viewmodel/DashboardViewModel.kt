@@ -50,12 +50,13 @@ class DashboardViewModel @Inject constructor(
                 }
         }
     }
-    
-    fun loadVehicles(userId: String) {
+
+    fun loadVehicles() {
         viewModelScope.launch {
-            vehicleRepository.getVehicles(userId)
+            vehicleRepository.getVehicles()
                 .onSuccess { vehicles ->
                     _uiState.value = _uiState.value.copy(vehicles = vehicles)
+
                     if (vehicles.isNotEmpty() && _uiState.value.selectedVehicleId == null) {
                         loadDashboard(vehicles.first().id)
                     }
@@ -67,7 +68,8 @@ class DashboardViewModel @Inject constructor(
                 }
         }
     }
-    
+
+
     fun selectVehicle(vehicleId: String) {
         _uiState.value = _uiState.value.copy(selectedVehicleId = vehicleId)
         loadDashboard(vehicleId)

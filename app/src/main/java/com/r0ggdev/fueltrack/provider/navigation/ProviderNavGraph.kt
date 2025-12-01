@@ -18,6 +18,7 @@ import com.r0ggdev.fueltrack.provider.ui.screens.vehicles.VehicleListScreen
 import com.r0ggdev.fueltrack.provider.ui.screens.vehicles.VehicleLocationUpdateScreen
 import com.r0ggdev.fueltrack.provider.ui.screens.notifications.NotificationDetailScreen
 import com.r0ggdev.fueltrack.provider.ui.screens.notifications.NotificationListScreen
+import com.r0ggdev.fueltrack.provider.ui.screens.orders.OrderDetailScreen
 
 sealed class ProviderScreen(val route: String) {
     object Dashboard : ProviderScreen("provider_dashboard")
@@ -37,6 +38,7 @@ sealed class ProviderScreen(val route: String) {
     object VehicleDetail : ProviderScreen("provider_vehicle_detail/{vehicleId}") {
         fun createRoute(vehicleId: String) = "provider_vehicle_detail/$vehicleId"
     }
+    object VehicleCreate : ProviderScreen("provider_vehicle_create")
     object VehicleLocationUpdate : ProviderScreen("provider_vehicle_location/{vehicleId}") {
         fun createRoute(vehicleId: String) = "provider_vehicle_location/$vehicleId"
     }

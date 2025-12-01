@@ -6,8 +6,17 @@ data class LoginRequest(
 )
 
 data class LoginResponse(
-    val token: String,
-    val userId: String? = null
+    val accessToken: String,
+    val refreshToken: String,
+    val expiresAt: String,
+    val user: UserDto
+)
+data class UserDto(
+    val id: Int,
+    val firstName: String,
+    val lastName: String,
+    val email: String,
+    val role: String
 )
 
 data class RegisterRequest(
@@ -20,7 +29,8 @@ data class RegisterRequest(
 )
 
 data class RegisterResponse(
-    val token: String,
-    val userId: String? = null
+    val accessToken: String,
+    val refreshToken: String,
+    val expiresAt: String,
+    val user: UserDto
 )
-

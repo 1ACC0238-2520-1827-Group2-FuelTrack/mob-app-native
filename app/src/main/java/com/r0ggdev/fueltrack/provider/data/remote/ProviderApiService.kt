@@ -7,69 +7,72 @@ import retrofit2.http.*
 interface ProviderApiService {
     
     // Analytics
-    @GET("Analytics/provider")
+    @GET("api/Analytics/provider")
     suspend fun getProviderAnalytics(): Response<ProviderAnalyticsDto>
-    
+
     // Orders
-    @GET("Orders/provider")
+    @GET("api/Orders/provider")
     suspend fun getProviderOrders(): Response<List<OrderDto>>
-    
-    @GET("Orders/{id}")
+
+    @GET("api/Orders/{id}")
     suspend fun getOrderById(@Path("id") id: String): Response<OrderDto>
-    
-    @PATCH("Orders/{id}/status")
+
+    @PATCH("api/Orders/{id}/status")
     suspend fun updateOrderStatus(
         @Path("id") id: String,
         @Body request: UpdateOrderStatusRequest
     ): Response<Unit>
     
     // Vehicles
-    @GET("Vehicles")
+    @GET("api/Vehicles")
     suspend fun getVehicles(): Response<List<ProviderVehicleDto>>
-    
-    @GET("Vehicles/{id}")
+
+    @GET("api/Vehicles/{id}")
     suspend fun getVehicleById(@Path("id") id: String): Response<ProviderVehicleDto>
-    
-    @PATCH("Vehicles/{id}/location")
+
+    @POST("api/Vehicles")
+    suspend fun createVehicle(@Body request: CreateVehicleRequest): Response<ProviderVehicleDto>
+
+    @PATCH("api/Vehicles/{id}/location")
     suspend fun updateVehicleLocation(
         @Path("id") id: String,
         @Body request: UpdateVehicleLocationRequest
     ): Response<Unit>
     
     // Operators
-    @GET("Operators")
+    @GET("api/Operators")
     suspend fun getOperators(): Response<List<OperatorDto>>
-    
-    @GET("Operators/{id}")
+
+    @GET("api/Operators/{id}")
     suspend fun getOperatorById(@Path("id") id: String): Response<OperatorDto>
-    
-    @POST("Operators")
+
+    @POST("api/Operators")
     suspend fun createOperator(@Body request: CreateOperatorRequest): Response<OperatorDto>
-    
-    @PUT("Operators/{id}")
+
+    @PUT("api/Operators/{id}")
     suspend fun updateOperator(
         @Path("id") id: String,
         @Body request: UpdateOperatorRequest
     ): Response<OperatorDto>
-    
-    @DELETE("Operators/{id}")
+
+    @DELETE("api/Operators/{id}")
     suspend fun deleteOperator(@Path("id") id: String): Response<Unit>
-    
+
     // Notifications
-    @GET("Notifications")
+    @GET("api/Notifications")
     suspend fun getNotifications(): Response<List<NotificationDto>>
-    
-    @GET("Notifications/{id}")
+
+    @GET("api/Notifications/{id}")
     suspend fun getNotificationById(@Path("id") id: String): Response<NotificationDto>
-    
-    @PATCH("Notifications/{id}/read")
+
+    @PATCH("api/Notifications/{id}/read")
     suspend fun markNotificationAsRead(@Path("id") id: String): Response<Unit>
-    
+
     // Profile
-    @GET("Users/profile")
+    @GET("api/Users/profile")
     suspend fun getProfile(): Response<ProviderProfileDto>
-    
-    @PUT("Users/profile")
+
+    @PUT("api/Users/profile")
     suspend fun updateProfile(@Body request: UpdateProfileRequest): Response<ProviderProfileDto>
 }
 

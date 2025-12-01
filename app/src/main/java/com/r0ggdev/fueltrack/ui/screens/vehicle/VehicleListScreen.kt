@@ -28,7 +28,7 @@ fun VehicleListScreen(
     
     LaunchedEffect(authState.userId) {
         authState.userId?.let { userId ->
-            vehicleViewModel.loadVehicles(userId)
+            vehicleViewModel.loadVehicles()
         }
     }
     

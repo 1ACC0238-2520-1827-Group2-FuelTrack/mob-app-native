@@ -26,11 +26,11 @@ class VehicleViewModel @Inject constructor(
     
     private val _uiState = MutableStateFlow(VehicleUiState())
     val uiState: StateFlow<VehicleUiState> = _uiState.asStateFlow()
-    
-    fun loadVehicles(userId: String) {
+
+    fun loadVehicles() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-            vehicleRepository.getVehicles(userId)
+            vehicleRepository.getVehicles()
                 .onSuccess { vehicles ->
                     _uiState.value = _uiState.value.copy(
                         vehicles = vehicles,
@@ -45,7 +45,37 @@ class VehicleViewModel @Inject constructor(
                 }
         }
     }
-    
+
+    fun loadVehicleById(id: String) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, error = null)
+
+            vehicleRepository.getVehicles() // usamos el endpoint existente
+                .onSuccess { vehicles ->
+                    val vehicle = vehicles.find { it.id.toString() == id }
+
+                    if (vehicle != null) {
+                        _uiState.value = _uiState.value.copy(
+                            vehicles = listOf(vehicle),
+                            isLoading = false
+                        )
+                    } else {
+                        _uiState.value = _uiState.value.copy(
+                            isLoading = false,
+                            error = "Vehículo no encontrado"
+                        )
+                    }
+                }
+                .onFailure { exception ->
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        error = exception.message ?: "Error desconocido"
+                    )
+                }
+        }
+    }
+
+
     fun createVehicle(request: CreateVehicleRequest, onSuccess: () -> Unit) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, error = null)
@@ -100,5 +130,10 @@ class VehicleViewModel @Inject constructor(
     fun clearError() {
         _uiState.value = _uiState.value.copy(error = null)
     }
+
+    fun getVehicleById(id: String): VehicleDto? {
+        return _uiState.value.vehicles.find { it.id.toString() == id }
+    }
+
 }
 
