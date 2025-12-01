@@ -14,12 +14,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.r0ggdev.fueltrack.navigation.Screen
 import com.r0ggdev.fueltrack.provider.navigation.ProviderScreen
+import com.r0ggdev.fueltrack.provider.ui.screens.operators.OperatorListScreen
 import com.r0ggdev.fueltrack.provider.ui.screens.orders.OrderDetailScreen
 import com.r0ggdev.fueltrack.provider.ui.screens.orders.OrderListScreen
 import com.r0ggdev.fueltrack.provider.ui.screens.vehicles.VehicleCreateScreen
 import com.r0ggdev.fueltrack.provider.ui.screens.vehicles.VehicleDetailScreen
 import com.r0ggdev.fueltrack.provider.ui.screens.vehicles.VehicleListScreen
 import com.r0ggdev.fueltrack.provider.ui.screens.vehicles.VehicleLocationUpdateScreen
+import com.r0ggdev.fueltrack.provider.ui.viewmodel.OperatorViewModel
 import com.r0ggdev.fueltrack.provider.ui.viewmodel.OrderViewModel
 import com.r0ggdev.fueltrack.provider.ui.viewmodel.VehicleViewModel
 import com.r0ggdev.fueltrack.ui.viewmodel.AuthViewModel
@@ -60,7 +62,6 @@ fun ProviderMainScreen(navController: NavHostController, startDestination: Strin
         )
     )
 
-    // PASO 2: Scaffold con NavigationBar
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Provider Dashboard") })
@@ -74,13 +75,11 @@ fun ProviderMainScreen(navController: NavHostController, startDestination: Strin
                         selected = currentRoute == item.route,
                         onClick = {
                             if (item.route == "logout") {
-                                // Lógica especial para logout
                                 authViewModel.logout()
                                 navController.navigate(Screen.Login.route) {
                                     popUpTo(0) { inclusive = true }
                                 }
                             } else {
-                                // Navegación normal
                                 navController.navigate(item.route) {
                                     popUpTo(ProviderScreen.Dashboard.route) {
                                         saveState = true
@@ -96,10 +95,8 @@ fun ProviderMainScreen(navController: NavHostController, startDestination: Strin
         }
     ) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
-            // Manejar rutas del provider directamente
             when (currentRoute) {
                 ProviderScreen.Dashboard.route -> {
-                    // Contenido simple para Dashboard
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -113,24 +110,25 @@ fun ProviderMainScreen(navController: NavHostController, startDestination: Strin
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
-                            text = "Próximo paso: agregar pantalla de Órdenes",
+                            text = "Bienvenido al dashboard.",
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.primary
                         )
                     }
                 }
                 ProviderScreen.Orders.route -> {
-                    // LISTA REAL DE PEDIDOS CONECTADA AL BACKEND
                     val orderViewModel: OrderViewModel = hiltViewModel()
                     OrderListScreen(navController = navController, viewModel = orderViewModel)
                 }
                 ProviderScreen.Vehicles.route -> {
-                    // LISTA DE VEHÍCULOS
                     val vehicleViewModel: VehicleViewModel = hiltViewModel()
                     VehicleListScreen(navController = navController, viewModel = vehicleViewModel)
                 }
+                ProviderScreen.Operators.route -> {
+                    val operatorViewModel: OperatorViewModel = hiltViewModel()
+                    OperatorListScreen(navController = navController, viewModel = operatorViewModel)
+                }
                 else -> {
-                    // Verificar si es una ruta con parámetros
                     when {
                         currentRoute?.startsWith("provider_order_detail/") == true -> {
                             val orderId = currentRoute?.substringAfter("provider_order_detail/") ?: ""
@@ -148,7 +146,6 @@ fun ProviderMainScreen(navController: NavHostController, startDestination: Strin
                             VehicleCreateScreen(navController = navController)
                         }
                         else -> {
-                            // Default: Dashboard
                             Text(
                                 text = "Ruta no encontrada: $currentRoute",
                                 modifier = Modifier.padding(16.dp)
@@ -166,4 +163,3 @@ data class BottomNavItem(
     val label: String,
     val icon: androidx.compose.ui.graphics.vector.ImageVector
 )
-
