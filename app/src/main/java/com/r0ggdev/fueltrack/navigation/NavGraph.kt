@@ -136,6 +136,10 @@ fun NavGraph(
             ProviderMainScreen(navController = navController, startDestination = ProviderScreen.Vehicles.route)
         }
 
+        composable("provider_operators") {
+            ProviderMainScreen(navController = navController, startDestination = ProviderScreen.Operators.route)
+        }
+
         // Rutas del provider con parámetros
         composable("provider_order_detail/{orderId}") { backStackEntry ->
             val orderId = backStackEntry.arguments?.getString("orderId") ?: ""

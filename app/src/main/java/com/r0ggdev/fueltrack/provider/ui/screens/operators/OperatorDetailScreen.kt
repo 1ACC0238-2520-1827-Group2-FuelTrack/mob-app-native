@@ -22,11 +22,11 @@ fun OperatorDetailScreen(
     viewModel: OperatorViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    
+
     LaunchedEffect(operatorId) {
         viewModel.loadOperatorById(operatorId)
     }
-    
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -37,18 +37,16 @@ fun OperatorDetailScreen(
                     }
                 },
                 actions = {
-                    IconButton(
-                        onClick = { navController.navigate(ProviderScreen.OperatorEdit.createRoute(operatorId)) }
-                    ) {
+                    IconButton(onClick = {
+                        navController.navigate(ProviderScreen.OperatorEdit.createRoute(operatorId))
+                    }) {
                         Icon(Icons.Default.Edit, contentDescription = "Editar")
                     }
-                    IconButton(
-                        onClick = {
-                            viewModel.deleteOperator(operatorId) {
-                                navController.popBackStack()
-                            }
+                    IconButton(onClick = {
+                        viewModel.deleteOperator(operatorId) {
+                            navController.popBackStack()
                         }
-                    ) {
+                    }) {
                         Icon(Icons.Default.Delete, contentDescription = "Eliminar")
                     }
                 }
@@ -73,24 +71,13 @@ fun OperatorDetailScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    Card(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = MaterialTheme.shapes.extraLarge
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                "${operator.firstName} ${operator.lastName}",
-                                style = MaterialTheme.typography.headlineMedium
-                            )
-                            Text("Teléfono: ${operator.phone}")
-                            Text("Número de licencia: ${operator.licenseNumber}")
-                            Text("Expiración: ${operator.licenseExpiryDate}")
-                            Text("Estado: ${if (operator.isActive) "Activo" else "Inactivo"}")
-                        }
-                    }
+                    Text("Nombre: ${operator.firstName} ${operator.lastName}", style = MaterialTheme.typography.titleLarge)
+                    Text("Licencia: ${operator.licenseNumber}")
+                    Text("Expiración de Licencia: ${operator.licenseExpiryDate}")
+                    Text("Teléfono: ${operator.phone}")
+                    Text("Estado: ${if (operator.isActive) "Activo" else "Inactivo"}")
                 }
             }
         }
     }
 }
-
