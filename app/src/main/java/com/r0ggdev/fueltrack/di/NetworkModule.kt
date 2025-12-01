@@ -1,0 +1,77 @@
+package com.r0ggdev.fueltrack.di
+
+import com.r0ggdev.fueltrack.data.local.PreferencesManager
+import com.r0ggdev.fueltrack.data.remote.ApiService
+import com.r0ggdev.fueltrack.provider.data.remote.ProviderApiService
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
+
+import com.r0ggdev.fueltrack.data.remote.AuthInterceptor
+
+@Module
+@InstallIn(SingletonComponent::class)
+object NetworkModule {
+    
+    //private const val BASE_URL = "https://fueltrack-api.onrender.com/api/"
+    private const val BASE_URL = "https://fueltrack-api.onrender.com/"
+
+    @Provides
+    @Singleton
+    fun provideAuthInterceptor(
+        preferencesManager: PreferencesManager
+    ): AuthInterceptor {
+        return AuthInterceptor {
+            preferencesManager.getTokenSync()
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        authInterceptor: AuthInterceptor
+    ): OkHttpClient {
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        return OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+    
+    @Provides
+    @Singleton
+    fun provideApiService(retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
+    }
+    
+    @Provides
+    @Singleton
+    fun provideProviderApiService(retrofit: Retrofit): ProviderApiService {
+        return retrofit.create(ProviderApiService::class.java)
+    }
+}
+
