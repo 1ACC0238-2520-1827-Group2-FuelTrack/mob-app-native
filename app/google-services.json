@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "584143252874",
+    "project_id": "fueltrack-3384c",
+    "storage_bucket": "fueltrack-3384c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584143252874:android:e8cc2f1a4dd3c3c184ac73",
+        "android_client_info": {
+          "package_name": "com.r0ggdev.fueltrack"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGC7p-MzU1-KRRQJGg_LMfYwLqCg5E9Hc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
